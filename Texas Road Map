@@ -1,0 +1,67 @@
+cnt =[0]*1400000
+vert_cnt = 0
+file_to_open = "roadNet-TX.txt"
+with open(file_to_open, 'r') as f:
+    line = f.readline()
+    count = 0
+    start_vertex,end_vertex = [],[]
+    while line:
+        count += 1
+        if count >=5:
+            start_vertex.append(int(line.split( )[0]))
+            end_vertex.append(int(line.split( )[1]))     
+        line=f.readline()
+    f.close()
+    graph = {}
+   
+    for i in range(len(start_vertex)):
+        v = start_vertex[i]
+        cnt[v]+=1
+        if v in graph:
+            graph[v] |= set([end_vertex[i]])
+        else:
+            graph[v] = set([end_vertex[i]])
+
+    print("Maximum degree of vertex",max(cnt))
+    print("Average degree of vertices",(sum(cnt)/len(graph)))
+   
+    #BFS for finding all reachable nodes at distance d from the graph
+   
+    visited = [False]*len(start_vertex)
+    queue = []
+    parent = [0]*1400000
+    level = [0]*1400000
+    c=0
+    
+    x=int(input("Enter start vertex"))
+    d=int(input("Enter the distance"))
+    queue.append(x)
+    visited[x] = True
+    level[x]=0
+    vert_cnt=0
+    while queue and c<=d:
+            s=queue.pop(0)
+            for i in graph[s]:
+                if visited[i] == False:
+                    queue.append(i)
+                    parent[i]=s
+                    level[i]=level[parent[i]]+1
+                    visited[i] = True
+                    c=level[i]
+    for i in range(0,len(level)):
+        if(level[i]<d and level[i]!=0):
+            vert_cnt+=1
+            #print(i)
+    
+    print("Number of Vertices in distance d including self",vert_cnt+1)
+                    
+
+        
+                    
+    
+
+                    
+                
+
+        
+  
